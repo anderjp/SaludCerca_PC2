@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Consulta finalizada')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('medico')}"></header>
+    <div th:replace="~{fragments/layout :: stepper(${ {'Agenda','Atender y diagnosticar','Finalizar'} }, 2)}"></div>
+
+    <main class="app-card">
+        <div class="confirm-wrap">
+            <div class="stamp">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 12.5L9.5 18L20 6" stroke="#125952" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2>Consulta finalizada</h2>
+            <div class="screen-sub" style="margin-bottom:6px;">El historial clínico del paciente fue actualizado.</div>
+            <div class="code-pill" th:text="${@ui.codigoCita(cita.id)}">SC-000000</div>
+
+            <div class="summary-card" style="text-align:left; margin-top:20px;">
+                <div class="summary-row"><span class="k">Paciente</span><span class="v" th:text="${cita.paciente.nombreCompleto}"></span></div>
+                <div class="summary-row"><span class="k">Tipo de atención</span><span class="v" th:text="${cita.tipoAtencion}"></span></div>
+                <th:block th:if="${historial != null}">
+                    <div class="summary-row"><span class="k">Diagnóstico</span><span class="v" th:text="${historial.diagnostico}"></span></div>
+                    <div class="summary-row"><span class="k">Receta</span><span class="v" th:text="${historial.receta}"></span></div>
+                    <div class="summary-row"><span class="k">Observaciones</span><span class="v" th:text="${historial.observaciones}"></span></div>
+                </th:block>
+                <div class="summary-row"><span class="k">Estado de la cita</span>
+                    <span class="v" style="color:var(--primary);" th:text="${cita.estado}"></span></div>
+            </div>
+
+            <div class="toast">
+                <span>🔔</span>
+                <div>
+                    <b>Notificación al paciente <span class="pattern-chip">Factory Method</span></b>
+                    <p th:text="${envio != null ? envio : 'Se avisó al paciente que su diagnóstico y receta ya están disponibles.'}"></p>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a class="ghost-btn" th:href="@{/medico(medicoId=${cita.medico.id})}">Volver a la agenda</a>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

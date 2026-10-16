@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<body>
+<!--
+  Nodo del árbol del catálogo (patrón COMPOSITE).
+  El fragmento se llama a sí mismo para cada hijo: trata igual a un servicio
+  (hoja) que a un paquete (compuesto).
+-->
+<li th:fragment="nodo(n)">
+    <div class="tree-row" th:classappend="${n.esCompuesto()} ? 'compuesto'">
+        <span th:text="${n.esCompuesto() ? '📦 ' + n.nombre : '• ' + n.nombre}">Servicio</span>
+        <span class="tree-price" th:text="|S/ ${n.precio()}|">S/ 0.00</span>
+    </div>
+    <ul th:if="${n.esCompuesto()}">
+        <th:block th:each="h : ${n.hijos}">
+            <li th:replace="~{fragments/arbol :: nodo(${h})}"></li>
+        </th:block>
+    </ul>
+</li>
+</body>
+</html>

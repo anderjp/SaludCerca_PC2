@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Panel administrativo')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('admin')}"></header>
+
+    <main class="app-card">
+        <nav th:replace="~{fragments/layout :: adminnav('panel')}"></nav>
+        <div class="eyebrow">Administración</div>
+        <h2>Panel administrativo</h2>
+        <div class="screen-sub" th:text="|Resumen general de la plataforma — ${@ui.fechaLarga(#temporals.createToday())}|"></div>
+
+        <div class="kpi-grid">
+            <div class="kpi-card"><div class="kpi-num" th:text="${totalCitas}">0</div><div class="kpi-label">Citas registradas</div></div>
+            <div class="kpi-card"><div class="kpi-num" th:text="${medicosActivos}">0</div><div class="kpi-label">Médicos activos</div></div>
+            <div class="kpi-card"><div class="kpi-num" th:text="${totalPacientes}">0</div><div class="kpi-label">Pacientes</div></div>
+            <div class="kpi-card alert"><div class="kpi-num" th:text="${pendientes}">0</div><div class="kpi-label">Verificaciones pendientes</div></div>
+        </div>
+
+        <div class="label-sm">Accesos rápidos</div>
+        <div class="nav-cards">
+            <a class="nav-card" th:href="@{/admin/medicos}">
+                <div class="nav-icon" style="background:var(--danger-soft);">🩺</div>
+                <div>
+                    <h3>Verificar médicos</h3>
+                    <p>Revisa la colegiatura antes de habilitar a los médicos nuevos en la plataforma.</p>
+                    <span class="badge-pending" th:if="${pendientes > 0}" th:text="|${pendientes} pendiente(s)|"></span>
+                </div>
+            </a>
+            <a class="nav-card" th:href="@{/admin/catalogo}">
+                <div class="nav-icon" style="background:var(--primary-soft);">🗂️</div>
+                <div>
+                    <h3>Gestionar catálogo</h3>
+                    <p>Especialidades, centros de salud y el árbol de servicios y paquetes.</p>
+                    <span class="pattern-chip">Composite</span>
+                </div>
+            </a>
+            <a class="nav-card" th:href="@{/admin/reportes}">
+                <div class="nav-icon" style="background:var(--plum-soft);">📊</div>
+                <div>
+                    <h3>Generar reportes</h3>
+                    <p>Atenciones por especialidad y región en el periodo que elijas.</p>
+                    <span class="pattern-chip">Builder</span>
+                </div>
+            </a>
+            <a class="nav-card" th:href="@{/admin/configuracion}">
+                <div class="nav-icon" style="background:#FBEFDA;">⚙️</div>
+                <div>
+                    <h3>Configuración general</h3>
+                    <p>Moneda, IGV, recargos y tarifario: una única configuración para todo el sistema.</p>
+                    <span class="pattern-chip">Singleton</span>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Inicio')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('inicio')}"></header>
+
+    <section class="hero">
+        <div class="eyebrow">PC2 · Diseño de Patrones</div>
+        <h1>Reserva tu cita médica,<br>presencial o por teleconsulta</h1>
+        <p>SaludCerca conecta pacientes con especialistas independientes. Elige un rol para recorrer el sistema:
+            cada pantalla ejecuta por detrás los patrones de diseño implementados.</p>
+    </section>
+
+    <div class="role-cards">
+        <a class="role-card" th:href="@{/paciente}">
+            <div class="nav-icon" style="background:var(--primary-soft);">🔎</div>
+            <h3>Paciente</h3>
+            <p>Busca un especialista, agenda tu cita, paga (simulado) y recibe tu confirmación con enlace de videollamada.</p>
+            <div class="chips-mini">
+                <span class="pattern-chip">Facade</span><span class="pattern-chip">Decorator</span>
+                <span class="pattern-chip">Abstract Factory</span><span class="pattern-chip">Adapter</span>
+                <span class="pattern-chip">Factory Method</span>
+            </div>
+        </a>
+        <a class="role-card" th:href="@{/medico}">
+            <div class="nav-icon" style="background:var(--plum-soft);">🩺</div>
+            <h3>Médico</h3>
+            <p>Revisa tu agenda, atiende la cita y registra el diagnóstico partiendo de una plantilla clonada.</p>
+            <div class="chips-mini">
+                <span class="pattern-chip">Prototype</span><span class="pattern-chip">Factory Method</span>
+            </div>
+        </a>
+        <a class="role-card" th:href="@{/admin}">
+            <div class="nav-icon" style="background:#FBEFDA;">📊</div>
+            <h3>Administrador</h3>
+            <p>Verifica médicos, gestiona el catálogo y sus paquetes, genera reportes y revisa la configuración central.</p>
+            <div class="chips-mini">
+                <span class="pattern-chip">Composite</span><span class="pattern-chip">Builder</span>
+                <span class="pattern-chip">Singleton</span>
+            </div>
+        </a>
+    </div>
+
+    <div class="lab-card">
+        <div>
+            <b>Laboratorio de patrones</b>
+            <div style="font-size:13px; opacity:.85;">Cada patrón ejecutado por separado, útil para las preguntas técnicas.</div>
+        </div>
+        <div style="display:flex; gap:18px;">
+            <a th:href="@{/demo/creacionales}">Creacionales →</a>
+            <a th:href="@{/demo/estructurales}">Estructurales →</a>
+        </div>
+    </div>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

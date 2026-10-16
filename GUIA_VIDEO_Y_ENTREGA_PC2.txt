@@ -1,0 +1,186 @@
+Guía para preparar la entrega y grabar la exposición de SaludCerca PC2
+Basada en la consigna del profesor y en el código revisado el 15/10/2026.
+
+El proyecto tiene los nueve patrones exigidos. El objetivo es completar la entrega verificable y demostrar dominio del código. No se garantiza una nota: cada criterio vale 4 puntos y la sustentación la evalúa el profesor.
+
+1. QUÉ FALTA SEGÚN LA RÚBRICA
+
+Criterio 1: entorno, framework y bibliotecas (4 puntos).
+Ya están Spring Boot, MVC, Thymeleaf, JPA/Hibernate, driver SQL, validación y logger. La aplicación se verificó con Java 21 y MariaDB de XAMPP. Mostrar el pom.xml y la separación model/repository/service/web/pattern. El Word y la PPT se ajustaron a Java 21 y a la fecha 16/10/2026. Probar la instalación desde una copia descargada del repositorio: iniciar-local.ps1 tiene rutas específicas de esta PC; para otra PC se necesita JDK 21, ejecutar el SQL en una base nueva, configurar MySQL y usar el wrapper Maven. El SQL no es una migración para importar repetidamente sobre tablas con datos.
+
+Criterio 2: cinco patrones creacionales (4 puntos).
+Están Singleton, Prototype, Factory Method, Abstract Factory y Builder. Deben verse funcionando, estar reflejados en UML y justificarse. El diagrama Abstract Factory del Word ya se ajustó al ancho de página. Corregir la referencia mutable entre Builder y Reporte: el reporte ya construido no debería cambiar al reutilizar el builder o modificar la lista expuesta.
+
+Criterio 3: cuatro patrones estructurales (4 puntos).
+Están Adapter, Facade, Decorator y Composite. Hay casos de uso en las pantallas. Corregir disponibilidad para que las citas canceladas no bloqueen turnos que se muestran libres y proteger las reservas simultáneas del mismo médico/horario. Explicar RENIEC, mensajes, pagos y enlaces de reunión como simulaciones de esta entrega.
+
+Criterio 4: calidad de código, SOLID y repositorio (4 puntos).
+Falta publicar el repositorio y colocar su URL real en Word 4.1 y diapositiva 1. El marcador [usuario] no cumple. Sin repositorio accesible, la rúbrica describe el nivel Inicio (1 punto) para este criterio. Mantener código fuente ordenado, documentación y README reproducible. Mejorar la separación de la lógica de registro/reserva actualmente presente en PacienteController. No basta un ZIP como único contenido del repositorio: el código debe poder examinarse y descargarse con sus carpetas.
+
+Criterio 5: sustentación y demo (4 puntos).
+Se debe explicar y demostrar cada patrón, localizarlo en código y responder preguntas. La consigna establece 15 minutos de presentación/demo y 5 de preguntas. El video sirve de ensayo o evidencia; la consigna entregada no dice que sustituya la demo en vivo, por lo que esa sustitución depende de lo que haya indicado el profesor por otro medio.
+
+Correcciones de documentos antes de grabar o entregar:
+- Fecha de portada 16/10/2026 e índice real: corregidos y verificados en el informe de 18 páginas.
+- Imágenes ajustadas al ancho útil sin deformarse: UML Abstract Factory y varias capturas se salen del área de página.
+- Java 21 en informe y PPT, de acuerdo con el POM y ejecución actuales.
+- URL real del repositorio en informe y PPT.
+- Manual de instalación en pasos separados y verificado desde otra carpeta/equipo.
+- Capturas claras del flujo funcional actual, además de las demostraciones de los patrones.
+
+Alcance pendiente de PC1, que no equivale a tener que terminar el 100% en PC2:
+Hay cancelación de citas sin interfaz implementada, verificación de centros pendiente, acceso sin autenticación real, reporte que llama región al distrito y pago que queda Pendiente. Si continúan fuera de esta entrega, declararlo claramente y no presentar esas funciones como terminadas. El 50% se sustenta con funcionalidades y casos de uso implementados frente a los pendientes, no con un porcentaje de líneas de código. Strategy y Observer son para una etapa posterior: no forman parte de los nueve patrones obligatorios de esta PC2.
+
+2. QUÉ ES EL REPOSITORIO Y CÓMO ENTREGARLO
+
+Un repositorio guarda el código y sus cambios. Git es la herramienta de versiones; GitHub es una plataforma donde puede alojarse el repositorio. El profesor necesita una URL desde la que pueda leer/descargar y ejecutar el proyecto. No es un requisito desplegar la web en un hosting público: localhost sirve para la demo y el repositorio sirve para entregar el código.
+
+Ruta sencilla usando el sitio web de GitHub:
+1) Crear/iniciar sesión en una cuenta de GitHub.
+2) Usar New repository, nombre SaludCerca-PC2. Elegir público para acceso sin invitación o privado con acceso concedido al profesor. La consigna permite repositorio público o con acceso.
+3) Crear el repositorio. Evitar generar otro README o .gitignore si se van a subir los que ya contiene el proyecto.
+4) Usar Add file / Upload files (o el enlace para subir archivos existente en un repositorio vacío). Arrastrar carpetas conservando su estructura.
+5) Subir src/, db/, .mvn/, pom.xml, mvnw, mvnw.cmd, README.md, .gitignore y .gitattributes. Agregar Word/PPT corregidos, por ejemplo en una carpeta docs/. No depender de iniciar-local.ps1 para otra computadora: contiene rutas locales.
+6) No subir target/, .vscode/, .claude/, historiales internos ni contraseñas o claves reales. En una carga por navegador hay que omitir esos archivos manualmente; no asumir que .gitignore filtrará una selección arrastrada.
+7) Guardar los cambios (commit) con un mensaje claro, por ejemplo: PC2: implementación de patrones y manual de ejecución. El historial debe reflejar cambios reales.
+8) La subida web admite hasta 100 archivos por operación y 25 MiB por archivo. Si el total excede 100 archivos, subir las carpetas en varios lotes. No subir el video pesado como parte del código; entregarlo por el medio que haya solicitado el profesor.
+9) Copiar la URL real, sustituir [usuario] en Word/PPT y verificar acceso desde otra sesión. Si es público, abrir en ventana privada; si es privado, comprobar con una cuenta autorizada.
+10) Descargar el repositorio en otra carpeta y seguir el README. Debe compilar y funcionar sin depender de archivos personales fuera de esa copia, salvo los requisitos instalados (JDK y MySQL).
+
+Guías oficiales consultadas:
+https://docs.github.com/es/repositories/creating-and-managing-repositories/creating-a-new-repository
+https://docs.github.com/es/repositories/working-with-files/managing-files/adding-a-file-to-a-repository
+
+3. PREPARACIÓN ANTES DEL VIDEO
+
+- MySQL de XAMPP encendido; aplicación accesible en http://127.0.0.1:8082/.
+- PowerPoint, VS Code con este proyecto, navegador y phpMyAdmin preparados.
+- En phpMyAdmin seleccionar saludcerca. Usar solo los datos de demostración.
+- Mostrar la barra de direcciones, ampliar diagramas/código y evitar notificaciones que tapen la pantalla.
+- Tener el repositorio abierto y la PPT corregida.
+- Para el recorrido más corto usar DNI 45231890 (Karla, ya registrada). Como alternativa, 70123456 sirve en el padrón simulado; si aún no existe en SaludCerca, solicita correo, teléfono y fecha de nacimiento. Usar correo de prueba y fecha ficticia adulta.
+- Elegir fecha futura y un horario que aparezca libre de la Dra. Milagros Castañeda. No repetir una reserva del ensayo; anotar el número de la nueva cita.
+- En Confirmar, primero cambiar seguro y comprobante; después validar DNI y completar los datos, porque esos cambios recargan el formulario.
+- No abrir el enlace Meet para intentar una videollamada: es una cadena de demostración, no una reunión creada con Google.
+
+4. RECORRIDO Y TEXTO PARA EXPONER EN 15 MINUTOS
+
+00:00–01:00. PPT diapositiva 1 y repositorio real.
+Mostrar carátula, integrantes y enlace; abrir el repositorio brevemente.
+Decir: «Somos el grupo de SaludCerca, una plataforma de gestión de citas para consultorios y centros independientes. Presentamos el avance de PC2 basado en PC1. El repositorio contiene el código, el script de base de datos y las instrucciones para ejecutarlo».
+
+01:00–02:00. PPT diapositiva 2 y pom.xml.
+Mostrar el stack Java 21, Spring Boot, Thymeleaf, JPA/Hibernate y MySQL/MariaDB; luego los paquetes del proyecto en VS Code.
+Decir: «La petición entra por un controlador, se resuelve con servicios y patrones, y los repositorios JPA acceden a la base. Las vistas se generan con Thymeleaf. Esta organización separa la presentación de la persistencia y permite trabajar con abstracciones».
+No afirmar que todos los controladores están perfectamente desacoplados: la revisión encontró lógica que todavía se puede extraer.
+
+02:00–03:30. PPT diapositivas 3 y 4: mapa de los nueve patrones.
+Nombrar cinco creacionales y cuatro estructurales, señalando sus clases y relaciones UML. Explicar solo dónde aparecerán en el recorrido; los detalles van en la demo.
+Decir: «Demostraremos la creación de objetos con Singleton, Prototype, Factory Method, Abstract Factory y Builder; y la colaboración entre objetos con Adapter, Facade, Decorator y Composite».
+
+03:30–05:00. Diapositiva 5 y luego página principal > Paciente > buscar y agendar.
+Abrir http://127.0.0.1:8082/. Seleccionar Paciente, buscar Castañeda/Nutrición Clínica, elegir Teleconsulta y una fecha/horario libres.
+Decir: «El paciente busca un especialista aprobado y consulta sus horarios. La teleconsulta se ofrece según la configuración de su especialidad. El sistema verifica otra vez la disponibilidad al confirmar».
+No decir que ya existe una protección robusta frente a reservas simultáneas mientras esté pendiente.
+
+05:00–07:00. Confirmar y pagar: cuatro patrones visibles.
+A) DECORATOR. Mostrar el desglose y activar/desactivar seguro.
+Decir: «El costo base se envuelve con responsabilidades adicionales: recargo, seguro e impuesto según la opción del comprobante. Podemos combinar estos objetos sin modificar ConsultaBase».
+Con Nutrición en teleconsulta y boleta, el código actual calcula 100.30 sin seguro y 112.10 con seguro. Usar el importe mostrado, pues puede cambiar si se modifica el tarifario.
+B) ABSTRACT FACTORY. Cambiar Boleta/Recibo y mostrar encabezado y leyenda.
+Decir: «Cada fábrica crea una familia coherente de dos productos: el comprobante y su leyenda. BoletaFactory y ReciboFactory producen sus respectivas versiones». Es un cálculo académico del proyecto, no una integración de emisión tributaria.
+C) ADAPTER. Validar DNI 45231890 y mostrar el nombre.
+Decir: «El proveedor simulado devuelve APELLIDOS|NOMBRES. ReniecValidadorAdapter transforma ese formato a ResultadoValidacion, que es lo que utiliza la aplicación. La integración real con RENIEC queda fuera del avance».
+D) FACTORY METHOD. Seleccionar SMS y señalar el canal.
+Decir: «NotificacionFactory define la operación de notificar y un método para crear el canal. Las subclases eligen CanalSms o CanalEmail. El envío está simulado en esta entrega».
+
+07:00–08:00. Confirmar reserva: FACADE y código.
+Pulsar Confirmar y pagar (simulado). Mostrar número de cita, fecha, estado, total y aviso. Anotar el número de la cita nueva.
+Decir: «Una llamada a AgendamientoFacade.agendarCita coordina las validaciones, la disponibilidad, la creación de cita, el enlace simulado, el registro del pago y la notificación. La transacción agrupa las escrituras en la base».
+Abrir AgendamientoFacade.java brevemente y señalar la secuencia.
+No decir «pago cobrado»: en este código Pago queda Pendiente y no se hace ningún cargo real.
+
+08:00–09:30. Médico: atender la nueva cita — PROTOTYPE.
+Usar Ver la agenda del médico o /medico y seleccionar a la Dra. Castañeda. Abrir Atender en la cita recién creada, no la cita ya completada durante el ensayo.
+Mostrar plantilla, editar el diagnóstico agregando «Demostración académica», colocar indicaciones ficticias y guardar con Guardar y finalizar consulta.
+Decir: «El formulario parte de una copia de PlantillaHistorial. El médico personaliza el clon sin modificar la plantilla del registro. Esto evita reconstruir el contenido base para cada atención».
+Para probar la independencia de las copias, mostrar 10–15 segundos http://127.0.0.1:8082/demo/prototype?clave=nutricion: el primer clon personalizado y el segundo intacto. No afirmar que editar un formulario por sí solo demuestra independencia en memoria.
+Volver a la consulta finalizada y mostrar su diagnóstico guardado.
+
+09:30–11:00. Administrador: COMPOSITE, BUILDER y SINGLETON.
+Catálogo: http://127.0.0.1:8082/admin/catalogo.
+Decir: «ServicioMedico es una hoja; PaqueteServicios puede agrupar hojas u otros paquetes. Los dos implementan ComponenteServicio. El precio del paquete suma recursivamente los precios de sus hijos». Mostrar el combo con paquete anidado. No afirmar que su precio sea siempre 300: ese es el valor del laboratorio de ejemplo, no necesariamente el catálogo real.
+Reportes: http://127.0.0.1:8082/admin/reportes. Elegir especialidad y rango, generar y señalar la atención nueva.
+Decir: «ReporteAtencionesBuilder construye el reporte por pasos: título, rango, especialidad, agrupación y totales; construir() entrega el producto Reporte». La agrupación llamada región usa el distrito actualmente; aclararlo o corregirlo antes de grabar.
+Configuración: http://127.0.0.1:8082/admin/configuracion.
+Decir: «ConfiguracionApp centraliza tarifas y parámetros. Dos llamadas a getInstance() se comparan y devuelven la misma referencia. El constructor es privado y la instancia compartida es estática».
+
+11:00–12:30. VS Code: demostrar dominio de implementación.
+Volver a las clases abiertas; no recorrer todo el proyecto.
+1) NotificacionFactory y una subclase: señalar el factory method crearCanal().
+2) ComprobanteFactory: señalar que tiene crearComprobante() y crearLeyenda(), dos productos de una familia.
+3) ComponenteServicio y PaqueteServicios.precio(): señalar la operación recursiva.
+Relacionar cada clase con su diagrama UML. Si ya se enseñó Facade durante reserva, no repetir su lectura completa.
+Decir: «Los nombres del UML corresponden a las clases ejecutadas. Dependemos de interfaces para intercambiar canales, fábricas, adaptadores y componentes. Una clase cumple una responsabilidad concreta; por ejemplo, DisponibilidadService comprueba horarios».
+No afirmar que un nuevo canal no requiere modificar absolutamente nada: se extiende el creador/producto, pero puede ser necesario registrarlo o incorporarlo al selector de la interfaz.
+
+12:30–14:00. Base de datos: mostrar que el recorrido guardó datos.
+En phpMyAdmin, base saludcerca, abrir SQL y ejecutar consultas de solo lectura:
+SELECT id_cita, id_paciente, id_medico, fecha_hora, estado FROM cita ORDER BY id_cita DESC LIMIT 5;
+SELECT id_cita, monto, estado_pago FROM pago ORDER BY id_pago DESC LIMIT 5;
+SELECT id_cita, diagnostico, observaciones FROM historial_clinico ORDER BY id_historial DESC LIMIT 5;
+SELECT id_notificacion, tipo, mensaje FROM notificacion ORDER BY id_notificacion DESC LIMIT 5;
+Localizar el número de cita anotado y su historial. La tabla notificacion no tiene id_cita: relacionar el aviso por el número escrito en el mensaje, sin afirmar una relación que el esquema no tiene.
+Decir: «La cita figura Completada y tiene un historial persistido. El pago es un registro simulado que permanece Pendiente. Las notificaciones registradas corresponden a la reserva y al diagnóstico. No son datos que desaparezcan al cambiar de pantalla».
+Cerrar con el repositorio: mostrar src/, db/, README y los documentos corregidos.
+
+14:00–15:00. PPT diapositiva 7: lecciones y pendientes reales.
+Decir: «Aprendimos a justificar los patrones mediante problemas concretos: variar canales, mantener familias de productos coherentes, reutilizar plantillas y componer costos y servicios. También alineamos el entorno con Java 21. Para la siguiente etapa quedan los accesos reales por rol, la cancelación y verificación de centros, y los patrones de comportamiento planteados en PC1. Las integraciones externas se han simulado para esta entrega. El código y el manual quedan disponibles en el repositorio presentado».
+Terminar indicando que están disponibles para preguntas técnicas. Si ya se corrigieron otros puntos, mencionar solo cambios realmente terminados.
+
+5. PREGUNTAS QUE DEBES PODER RESPONDER
+
+¿Qué diferencia hay entre Factory Method y Abstract Factory?
+Factory Method delega a subclases la creación de un producto: el canal Email/SMS. Abstract Factory produce una familia de productos relacionados: comprobante y leyenda.
+
+¿Qué diferencia hay entre Adapter y Facade?
+Adapter traduce una interfaz/formato incompatible; aquí la respuesta del proveedor simulado. Facade ofrece una operación sencilla que coordina varios subsistemas; aquí el agendamiento completo.
+
+¿Dónde está el Singleton? ¿Por qué no basta una variable global?
+En ConfiguracionApp, con constructor privado y acceso estático controlado. El diseño restringe la construcción y entrega la misma instancia. La demostración compara referencias, no simplemente que dos números impresos coincidan.
+
+¿Cómo demuestras Prototype?
+Crear dos clones desde la plantilla registrada, cambiar uno y verificar que el otro conserve los datos base; mostrar el endpoint o clonar() y el constructor de copia.
+
+¿Dónde se ve Decorator?
+En objetos CostoConsulta envueltos por decoradores de recargo, seguro e impuesto. Todos conservan la interfaz monto()/descripcion().
+
+¿Por qué Composite y no solo una lista?
+Porque un paquete puede contener servicios o paquetes anidados y el cliente usa la misma interfaz para ambos; el total se calcula recursivamente.
+
+¿Dónde se usa Builder?
+En ReporteService al configurar pasos opcionales y llamar construir(), que produce Reporte. No confundir un formulario con la implementación del patrón.
+
+¿La validación RENIEC y los avisos son reales?
+No. Son proveedores/canales simulados que permiten probar el diseño. El adaptador conserva el contrato para sustituir el proveedor en una integración futura.
+
+¿El repositorio ejecuta la página por sí mismo?
+No. Permite revisar y descargar el código. Se ejecuta siguiendo el README; una publicación en hosting sería una tarea adicional.
+
+¿Qué porcentaje tienen completo?
+Explicar el alcance verificable: reserva con validaciones y registro de pago/aviso, atención con plantilla e historial, panel/catálogo/reportes/configuración y los nueve patrones. Declarar los casos de uso pendientes. No inventar una medición de porcentaje por archivos o líneas.
+
+6. EVIDENCIA Y LÍMITES DE LA REVISIÓN
+
+Se verificaron 19 pasos HTTP del flujo y nueve comprobaciones después del reinicio, además de comprobaciones aisladas de patrones. El guion está basado en las rutas, etiquetas y clases que existen. Esto no garantiza ausencia de todos los errores ni sustituye dominio del grupo. Antes de entregar, resolver los pendientes prioritarios y ensayar el recorrido con una reserva nueva.
+
+Este archivo es una guía de preparación; no modifica el código, los documentos ni publica un repositorio.
+
+
+Actualización de documentos y publicación desde VS Code
+
+Se ajustaron el Word y la PPT a Java 21 y a la fecha confirmada 16/10/2026. El informe tiene 18 páginas: los 22 enlaces del índice coinciden con sus páginas, los diagramas caben dentro del ancho útil y las capturas conservan su proporción. La PPT conserva siete diapositivas y tiene notas del presentador para el recorrido. El README se ajustó a la misma instalación y al alcance real. El enlace definitivo del repositorio continúa pendiente. Los pendientes del código identificados en la revisión no se han corregido mediante estos ajustes de documentos.
+
+Desde la pantalla mostrada de VS Code, Publish to GitHub public repository crea un repositorio público; Publish to GitHub private repository lo crea privado y requiere conceder acceso al profesor. Abrir antes la carpeta SaludCerca_PC2 de la ruta revisada, elegir un nombre disponible y comprobar los archivos seleccionados. .gitignore excluye target, .vscode, .claude, logs y archivos locales. Al terminar, usar Open on GitHub y copiar la URL real para insertarla en Word y en la primera diapositiva. Si se publica antes de guardar estas correcciones, hacer después un commit y subirlo con Push/Sync Changes.
+
+Referencia oficial: https://code.visualstudio.com/docs/sourcecontrol/repos-remotes

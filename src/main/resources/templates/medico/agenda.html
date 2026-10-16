@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Agenda del médico')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('medico')}"></header>
+    <div th:replace="~{fragments/layout :: stepper(${ {'Agenda','Atender y diagnosticar','Finalizar'} }, 0)}"></div>
+
+    <main class="app-card">
+        <div class="eyebrow">Fase 1</div>
+        <h2>Tu agenda</h2>
+
+        <div class="empty" th:if="${medico == null}">No hay médicos aprobados todavía.</div>
+
+        <th:block th:if="${medico != null}">
+            <form class="medico-select" method="get" th:action="@{/medico}">
+                <span class="label-sm" style="margin:0;">Ver agenda de</span>
+                <select name="medicoId" onchange="this.form.submit()">
+                    <option th:each="m : ${medicos}" th:value="${m.id}"
+                            th:text="|${m.nombreCompleto} · ${m.especialidad.nombre}|"
+                            th:selected="${m.id == medico.id}"></option>
+                </select>
+            </form>
+
+            <div class="agenda-head">
+                <div class="agenda-date">Citas por atender</div>
+                <div class="agenda-count" th:text="|${#lists.size(porAtender)} cita(s)|">0 citas</div>
+            </div>
+
+            <div class="cita-card" th:each="c : ${porAtender}">
+                <div class="cita-time">
+                    <div th:text="${#temporals.format(c.fechaHora, 'HH:mm')}">10:00</div>
+                    <div class="cita-fecha" th:text="${#temporals.format(c.fechaHora, 'dd/MM')}">01/01</div>
+                </div>
+                <div class="avatar" th:style="|background:${@ui.colorPersona(c.paciente.id)}|"
+                     th:text="${@ui.iniciales(c.paciente.nombres, c.paciente.apellidos)}">KE</div>
+                <div class="cita-info">
+                    <div class="cita-name">
+                        <span th:text="${c.paciente.nombreCompleto}">Paciente</span>
+                        <span style="font-weight:400; color:var(--ink-muted);" th:text="|· ${@ui.edad(c.paciente.fechaNacimiento)} años|"></span>
+                    </div>
+                    <div class="cita-meta" th:text="|Cita ${@ui.codigoCita(c.id)} · ${c.medico.especialidad.nombre}|"></div>
+                    <div style="margin-top:6px;">
+                        <span class="tag" th:classappend="${c.tipoAtencion.name() == 'Presencial'} ? 'tag-presencial' : 'tag-teleconsulta'"
+                              th:text="${c.tipoAtencion.name() == 'Presencial'} ? '🏥 Presencial' : '💻 Teleconsulta'"></span>
+                        <span class="tag" th:classappend="${c.estado.name() == 'Confirmada'} ? 'tag-confirmada' : 'tag-pendiente'"
+                              th:text="${c.estado}"></span>
+                    </div>
+                </div>
+                <a class="btn-atender" th:href="@{/medico/cita/{id}(id=${c.id})}">Atender</a>
+            </div>
+            <div class="empty" th:if="${#lists.isEmpty(porAtender)}">No tienes citas pendientes. ¡Todo al día!</div>
+
+            <th:block th:unless="${#lists.isEmpty(atendidas)}">
+                <div class="label-sm" style="margin-top:26px;">Atendidas</div>
+                <div class="cita-card atendida" th:each="c : ${atendidas}">
+                    <div class="cita-time">
+                        <div th:text="${#temporals.format(c.fechaHora, 'HH:mm')}">10:00</div>
+                        <div class="cita-fecha" th:text="${#temporals.format(c.fechaHora, 'dd/MM')}">01/01</div>
+                    </div>
+                    <div class="avatar" th:style="|background:${@ui.colorPersona(c.paciente.id)}|"
+                         th:text="${@ui.iniciales(c.paciente.nombres, c.paciente.apellidos)}">KE</div>
+                    <div class="cita-info">
+                        <div class="cita-name" th:text="${c.paciente.nombreCompleto}">Paciente</div>
+                        <div style="margin-top:6px;"><span class="tag tag-completada">Completada</span></div>
+                    </div>
+                    <a class="btn-atender ghost" th:href="@{/medico/cita/{id}/finalizada(id=${c.id})}">Ver resumen</a>
+                </div>
+            </th:block>
+        </th:block>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

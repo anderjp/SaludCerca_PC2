@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Reportes de atenciones')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('admin')}"></header>
+
+    <main class="app-card">
+        <nav th:replace="~{fragments/layout :: adminnav('reportes')}"></nav>
+        <div class="eyebrow">Administración</div>
+        <h2>Reportes de atenciones</h2>
+        <div class="screen-sub">Genera reportes por especialidad y región. Cada filtro es un paso del <span class="pattern-chip">Builder</span></div>
+
+        <form class="filter-row" method="get" th:action="@{/admin/reportes}">
+            <select name="dias">
+                <option value="0" th:selected="${dias == 0}">Todo el historial</option>
+                <option value="7" th:selected="${dias == 7}">Registradas en los últimos 7 días</option>
+                <option value="30" th:selected="${dias == 30}">Registradas en los últimos 30 días</option>
+                <option value="90" th:selected="${dias == 90}">Registradas en los últimos 90 días</option>
+            </select>
+            <select name="especialidad">
+                <option value="">Todas las especialidades</option>
+                <option th:each="e : ${especialidades}" th:value="${e.id}" th:text="${e.nombre}"
+                        th:selected="${e.id == especialidadSel}"></option>
+            </select>
+            <label class="check"><input type="checkbox" name="agrupar" value="true" th:checked="${agrupar}"> Agrupar por región</label>
+            <button type="submit">Generar reporte</button>
+        </form>
+
+        <div class="report-summary">
+            <div class="kpi-card"><div class="kpi-num" th:text="${resultado.total}">0</div><div class="kpi-label">Citas en el reporte</div></div>
+            <div class="kpi-card"><div class="kpi-num" th:text="${resultado.completadas}">0</div><div class="kpi-label">Atenciones completadas</div></div>
+            <div class="kpi-card"><div class="kpi-num" th:text="${resultado.teleconsultas}">0</div><div class="kpi-label">Teleconsultas</div></div>
+            <div class="kpi-card"><div class="kpi-num" th:text="|S/ ${resultado.montoPagos}|">S/ 0</div><div class="kpi-label">Monto simulado</div></div>
+        </div>
+
+        <div class="chart-card">
+            <div class="chart-title">Atenciones por especialidad</div>
+            <div class="bar-row" th:each="e : ${resultado.porEspecialidad}">
+                <div class="bar-label" th:text="${e.key}">Especialidad</div>
+                <div class="bar-track">
+                    <div class="bar-fill" th:style="|width:${resultado.maximo gt 0 ? e.value * 100 / resultado.maximo : 0}%|"></div>
+                </div>
+                <div class="bar-value" th:text="${e.value}">0</div>
+            </div>
+        </div>
+
+        <div class="section-title">Reporte generado <span class="pattern-chip">Builder · construir()</span></div>
+        <pre class="report" th:text="${resultado.reporte.generar()}"></pre>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

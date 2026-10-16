@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Verificar médicos')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('admin')}"></header>
+
+    <main class="app-card">
+        <nav th:replace="~{fragments/layout :: adminnav('medicos')}"></nav>
+        <div class="eyebrow">Administración</div>
+        <h2>Verificar médicos</h2>
+        <div class="screen-sub">Aprueba o rechaza las solicitudes de registro. Solo los médicos aprobados aparecen en la búsqueda del paciente.</div>
+        <th:block th:replace="~{fragments/layout :: alertas}"></th:block>
+
+        <div class="label-sm" th:text="|Pendientes (${#lists.size(pendientes)})|">Pendientes</div>
+        <div class="verify-card" th:each="m : ${pendientes}">
+            <div class="verify-top">
+                <div>
+                    <div class="verify-name" th:text="${m.nombreCompleto}">Médico</div>
+                    <div class="verify-meta"
+                         th:text="|${m.especialidad.nombre} · ${m.colegiatura} · ${m.centroSalud.nombre}, ${m.centroSalud.distrito}|"></div>
+                </div>
+                <span class="doc-chip">📄 Colegiatura</span>
+            </div>
+            <div class="verify-actions">
+                <form method="post" th:action="@{/admin/medicos/{id}/estado(id=${m.id})}">
+                    <input type="hidden" name="estado" value="Aprobado">
+                    <button type="submit" class="btn-approve">Aprobar</button>
+                </form>
+                <form method="post" th:action="@{/admin/medicos/{id}/estado(id=${m.id})}">
+                    <input type="hidden" name="estado" value="Rechazado">
+                    <button type="submit" class="btn-reject">Rechazar</button>
+                </form>
+            </div>
+        </div>
+        <div class="empty" th:if="${#lists.isEmpty(pendientes)}">No hay solicitudes pendientes.</div>
+
+        <div class="label-sm" style="margin-top:26px;">Resueltos</div>
+        <div class="verify-card" th:each="m : ${resueltos}" style="padding:12px 18px;">
+            <div class="verify-top" style="align-items:center;">
+                <div>
+                    <div class="verify-name" th:text="${m.nombreCompleto}">Médico</div>
+                    <div class="verify-meta" th:text="|${m.especialidad.nombre} · ${m.colegiatura}|"></div>
+                </div>
+                <span class="status-tag" th:classappend="${m.estadoVerificacion.name() == 'Aprobado'} ? 'status-approved' : 'status-rejected'"
+                      th:text="${m.estadoVerificacion}"></span>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

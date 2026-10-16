@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Atender cita')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('medico')}"></header>
+    <div th:replace="~{fragments/layout :: stepper(${ {'Agenda','Atender y diagnosticar','Finalizar'} }, 1)}"></div>
+
+    <main class="app-card">
+        <a class="back-link" th:href="@{/medico(medicoId=${cita.medico.id})}">&larr; Volver a la agenda</a>
+        <th:block th:replace="~{fragments/layout :: alertas}"></th:block>
+
+        <div class="patient-header">
+            <div class="avatar" th:style="|background:${@ui.colorPersona(cita.paciente.id)}|"
+                 th:text="${@ui.iniciales(cita.paciente.nombres, cita.paciente.apellidos)}">KE</div>
+            <div>
+                <h2 th:text="|${cita.paciente.nombreCompleto} · ${@ui.edad(cita.paciente.fechaNacimiento)} años|">Paciente</h2>
+                <div class="cita-meta" th:text="|Cita ${@ui.codigoCita(cita.id)} · ${cita.medico.especialidad.nombre}|"></div>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-box"><div class="k">Tipo de atención</div><div class="v" th:text="${cita.tipoAtencion}"></div></div>
+            <div class="info-box"><div class="k">Fecha y hora</div>
+                <div class="v" th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy HH:mm')}"></div></div>
+            <div class="info-box"><div class="k">DNI</div><div class="v mono" th:text="${cita.paciente.dni}"></div></div>
+            <div class="info-box"><div class="k">Teléfono</div>
+                <div class="v mono" th:text="${cita.paciente.telefono != null ? cita.paciente.telefono : '—'}"></div></div>
+        </div>
+
+        <div class="video-box" th:if="${cita.enlaceVideollamada != null}">
+            <div class="video-label">🔗 Enlace externo</div>
+            <p style="font-weight:600;" th:text="|Videollamada con ${cita.paciente.nombres} por Google Meet|"></p>
+            <a class="mono" th:href="${cita.enlaceVideollamada}" target="_blank" rel="noopener" th:text="${cita.enlaceVideollamada}"></a>
+        </div>
+
+        <div class="eyebrow">Fase 2</div>
+        <h2>Registrar diagnóstico</h2>
+
+        <!-- PROTOTYPE: el formulario se llena con un CLON de la plantilla elegida -->
+        <form class="plantilla-bar" method="get" th:action="@{/medico/cita/{id}(id=${cita.id})}">
+            <div class="field" style="margin:0; flex:1; min-width:230px;">
+                <label>Partir de una plantilla <span class="pattern-chip">Prototype</span></label>
+                <select name="plantilla" onchange="this.form.submit()">
+                    <option th:each="p : ${plantillas}" th:value="${p.key}" th:text="${p.value}"
+                            th:selected="${p.key == clave}"></option>
+                </select>
+            </div>
+            <div class="plantilla-note">
+                Se carga una <b>copia</b> de la plantilla base (<span th:text="${clon.nombrePlantilla}"></span>):
+                puedes editarla sin modificar la original.
+            </div>
+        </form>
+
+        <form method="post" th:action="@{/medico/cita/{id}/finalizar(id=${cita.id})}">
+            <div class="field">
+                <label>Diagnóstico</label>
+                <textarea name="diagnostico" required th:text="${clon.diagnosticoBase}"></textarea>
+            </div>
+            <div class="field">
+                <label>Receta / indicaciones</label>
+                <textarea name="receta" th:text="${clon.recetaBase}"></textarea>
+            </div>
+            <div class="field">
+                <label>Observaciones</label>
+                <textarea name="observaciones" style="min-height:54px;" th:text="${clon.observacionesBase}"></textarea>
+            </div>
+            <button type="submit" class="primary-btn">Guardar y finalizar consulta</button>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

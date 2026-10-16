@@ -1,0 +1,100 @@
+Revisión de SaludCerca contra la consigna y rúbrica de PC2
+Fecha de revisión: 15/10/2026
+Proyecto revisado: C:\Users\Anderson\Downloads\SaludCerca_PC2 (3)_QOVGFB\SaludCerca_PC2
+Consigna: PRACTICA CALIFICADA 2 - DISEÑO DE PATRONES.docx, ubicada en la carpeta SALUDCERCA.
+
+El proyecto contiene los cinco patrones creacionales y los cuatro estructurales solicitados. También contiene README, script SQL, informe Word con los nueve diagramas y nueve capturas, y una presentación de siete diapositivas. No falta agregar otro patrón requerido por esta PC2. Hay pendientes de entrega y correcciones que conviene resolver antes de sustentar.
+
+ESTADO DE LOS CINCO CRITERIOS (cada uno vale 4 puntos)
+
+1. Entorno, frameworks y bibliotecas: estructura presente; ejecución completa pendiente.
+Spring Boot, MVC, Thymeleaf, JPA/Hibernate, driver SQL, validación y logger están integrados. Compilé los 78 archivos Java con resultado BUILD SUCCESS usando JDK 21 y la opción -Djava.version=21. No cambié el pom.xml.
+Sin esa opción, pom.xml exige Java 25 (línea 30), y .vscode/settings.json apunta a C:\Program Files\Java\jdk-25, carpeta que no existe en esta PC. El README indica «JDK 25 (o 21+)», pero no explica el cambio necesario para compilar con 21. Hay que unificar POM, VS Code y manual con el JDK que realmente se usará.
+MySQL de XAMPP responde, pero la consulta SHOW DATABASES LIKE "saludcerca%" no encontró la base requerida. El puerto 8082 no estaba atendiendo. No inicié el sistema ni importé el SQL: está pendiente la autorización explícita solicitada para crear la base local saludcerca. No se crearon usuarios ni credenciales.
+
+2. Patrones creacionales: los cinco están implementados y documentados.
+Singleton: ConfiguracionApp, constructor privado, volatile y doble comprobación.
+Factory Method: NotificacionFactory y subclases Email/SMS, con método creador sobrescrito.
+Prototype: PlantillaHistorial y registro que entrega clones.
+Abstract Factory: familias Boleta y Recibo, cada una con dos productos relacionados: comprobante y leyenda.
+Builder: ReporteAtencionesBuilder construye Reporte con opciones.
+Hallazgo: Reporte.java:34 conserva this.filas = b.filas; además getFilas() expone la lista mutable (líneas 67-68). Reproduje que un reporte ya construido cambia de una a dos filas cuando se reutiliza el builder. Recomiendo tomar una copia defensiva al construir y evitar exponer la colección mutable. Esto es una corrección de calidad, no la ausencia del patrón.
+
+3. Patrones estructurales: los cuatro están implementados y documentados.
+Adapter: traduce el padrón simulado de RENIEC a ResultadoValidacion.
+Facade: coordina validación, disponibilidad, cita, enlace, pago y notificación, con transacción.
+Decorator: envuelve el costo con recargo, seguro e IGV.
+Composite: hojas y paquetes anidados con suma recursiva.
+Hallazgo de disponibilidad: DisponibilidadService.java:22 consulta cualquier cita a la misma hora sin excluir Cancelada; PacienteController.java:116 sí excluye las canceladas al mostrar horarios. Un turno puede verse libre y después ser rechazado. La consulta previa tampoco garantiza que dos solicitudes simultáneas no reserven el mismo turno: el SQL no tiene restricción única de reserva activa ni se observa bloqueo de ese turno en el flujo. Conviene corregirlo y verificarlo antes de una demo con varias personas.
+La ejecución integral del Facade queda sin verificar hasta disponer de la base de datos.
+
+4. Calidad de código, SOLID y repositorio: entrega incompleta por el enlace.
+El código está organizado en paquetes y documentado, con interfaces para los patrones y varias dependencias por constructor. Hay instrucciones y script SQL.
+Pendiente obligatorio: el informe, sección 4.1, conserva https://github.com/[usuario]/SaludCerca-PC2; la diapositiva 1 también conserva [usuario]. No encontré carpeta .git en esta copia. Esto no demuestra que no exista un repositorio externo, pero aquí no hay una URL real que permita verificarlo. Publicar o proporcionar el repositorio accesible, probar los permisos y reemplazar el marcador tanto en Word como en PPT. Es especialmente relevante porque la rúbrica califica con 1 punto este criterio si no se entrega un repositorio accesible.
+Hay lógica de negocio y acceso directo a repositorios en controladores, especialmente PacienteController; extraer el registro del paciente y reglas de reserva a servicios reforzaría separación de capas y SOLID.
+
+5. Sustentación y demo en vivo: material presente; desempeño por evaluar.
+La PPT tiene exactamente siete diapositivas con la estructura pedida y rutas para demostrar los nueve patrones. Esto prepara la sustentación, pero los cuatro puntos dependen de ejecutar el sistema y responder sobre el código. Ensayar 15 minutos de exposición/demo y 5 minutos de preguntas, mostrando el flujo completo y no solo leyendo las salidas capturadas.
+No asigno una nota final: no se ha probado la demo completa ni evaluado el dominio oral del grupo.
+
+CORRECCIONES DEL INFORME Y LA PRESENTACIÓN
+
+- Completar la fecha de entrega en la portada. La consigna menciona semana 10; no fija una fecha calendario, por lo que no corresponde inventarla.
+- Actualizar el índice: todas sus entradas muestran página 1 en el documento y en la revisión renderizada.
+- Ajustar imágenes al ancho útil. La hoja A4 tiene 2,54 cm de margen a cada lado: quedan unos 15,92 cm de ancho útil. El dibujo de Abstract Factory mide 23,87 cm en el propio DOCX. Al renderizar, en la página 7 desaparece por la derecha parte de la familia LeyendaTributaria. Este problema afecta la evidencia UML exigida para creacionales.
+- Varias capturas de ejecución están insertadas con 25,93 cm de ancho, por encima del área útil e incluso del ancho de una hoja A4. Otras imágenes están deformadas respecto de su proporción original. Reajustar proporcionalmente, mejorar legibilidad y revisar nuevamente Word/PDF antes de entregar.
+- En la sección 4.2, separar los pasos de instalación en párrafos o pasos numerados: actualmente aparecen concatenados.
+- Explicar con claridad las simulaciones en Word, PPT y demo. ReniecApiExterna usa un Map local; CanalEmail y CanalSms devuelven mensajes sin enviar comunicaciones; GeneradorEnlaceVideollamada produce una cadena aleatoria con formato de Meet, no crea una reunión operativa. Estos simuladores permiten demostrar los patrones; no hay que presentarlos como integraciones reales ya conectadas. La rúbrica no exige contratar servicios externos.
+- Las diapositivas 3 y 4 incluyen los diagramas; conviene ampliarlos durante las preguntas porque contienen muchas clases en una sola lámina. La presentación renderizada no mostró un recorte equivalente al del Word.
+
+ALINEACIÓN CON PC1 Y ALCANCE DEL 50%
+
+Son pendientes del producto original que deben declararse en el alcance; no todos son obligaciones de terminar el 100% para PC2:
+- PC1 contempla cancelar citas; esta copia define el estado Cancelada, pero no trae una ruta de cancelación para el paciente.
+- Se verifican médicos, pero no hay estado ni proceso de aprobación de centros de salud antes de publicarlos, como planteó PC1.
+- El reporte llama «región» al distrito del centro (ReporteService.java:71). También incorpora citas pendientes/futuras y suma montos sin restringir a pagos realizados; aclarar si el reporte es de citas registradas o de atenciones completadas y cobros.
+- El flujo «confirmar y pagar» registra Pago con estado Pendiente y no se encontró una operación que lo cambie a Pagado con fecha. Si se demostrará pago simulado completado, falta esa transición; si solo se registra la intención de pago, indicarlo así.
+- La selección de roles es navegación de demostración; no hay autenticación/autorización. Los controladores permiten consultar citas por ID y cambiar estado de médicos sin control de identidad. No usar datos personales reales y declarar el acceso por roles como parte pendiente si queda fuera de este 50%.
+
+VERIFICACIÓN REALIZADA
+
+- Lectura de la consigna PC2, rúbrica y puntos relevantes de PC1.
+- Lectura del README, POM, configuración, SQL, entidades, repositorios, servicios, controladores, plantillas y clases de patrones.
+- Extracción y lectura del Word y de las siete diapositivas, incluidas sus imágenes UML y capturas.
+- Renderizado del Word a 24 páginas y de la PPT a 7 páginas para inspeccionar su presentación.
+- Compilación Maven con JDK 21 y -Djava.version=21: BUILD SUCCESS.
+- Nueve comprobaciones aisladas satisfactorias: identidad Singleton, independencia Prototype, canales Factory Method, dos familias Abstract Factory, construcción Builder, adaptación de respuesta/error, costo Decorator 112.10 y suma Composite recursiva. Estas son verificaciones externas de revisión; no se añadieron al código entregable.
+- Reproducción independiente del alias mutable entre Builder y Reporte.
+- La prueba incluida en el proyecto es solo contextLoads(); no trae comprobaciones de comportamiento de los patrones. Agregar pruebas significativas sería una mejora, pero la sección 3.3 permite capturas API/pantallas como alternativa: no se considera por sí sola una falta de entrega.
+- No se ejecutó contextLoads() ni el flujo web porque no está creada la base de datos requerida. No se probaron concurrencia ni integración MySQL; los hallazgos respectivos provienen de inspección del código.
+
+Se generaron únicamente archivos de compilación en target. No se modificaron las clases Java, pom.xml, configuración, SQL, informe Word ni PPT originales. Este archivo contiene la revisión, no una corrección del proyecto.
+
+
+ACTUALIZACIÓN TRAS LA AUTORIZACIÓN DEL USUARIO — 15/10/2026
+
+Esta actualización sustituye las observaciones anteriores que indicaban base ausente y ejecución pendiente. El usuario autorizó expresamente crear e importar saludcerca. Se comprobó de nuevo que no existiera y se importó el SQL original, sin crear usuarios nuevos ni modificar el esquema del script.
+
+El proyecto quedó ejecutándose en http://127.0.0.1:8082/ con Java 21, MariaDB de XAMPP y la opción Maven -Djava.version=21. El POM y los documentos originales siguen sin cambios. El arranque agregó sus propios datos demo: 4 especialidades, 3 centros, 3 pacientes, 6 médicos y 2 citas iniciales.
+
+Se completaron 19 comprobaciones HTTP: ocho endpoints de patrones, cuatro páginas de administración, vista previa de reserva, reserva real mediante Facade, confirmación de total/estado, agenda médica, plantilla Prototype, cierre de atención con historial y reporte. La cita de prueba es la número 3 (SC-000003), teleconsulta con importe 112.10. Se usaron exclusivamente los datos de demostración. Esto verifica el flujo local principal; no equivale a pruebas exhaustivas de concurrencia, seguridad o integración externa.
+
+La aplicación registra el pago como Pendiente, tal como se observó en el código. La atención de prueba sí quedó Completada. No se modificó esta regla para hacer pasar las verificaciones.
+
+Se agregó iniciar-local.ps1 junto al proyecto para volver a iniciarlo en esta PC con el JDK y la caché Maven ya verificados. Desde PowerShell en esta carpeta: .\iniciar-local.ps1. Si la política de scripts impide ejecutarlo, usar powershell -NoProfile -ExecutionPolicy Bypass -File .\iniciar-local.ps1; esta opción solo se aplica a ese proceso. El script requiere que MySQL de XAMPP esté encendido, reutiliza el runtime portátil que está en SALUDCERCA\.tools y evita iniciar otra instancia si la aplicación ya responde.
+
+Los pendientes de repositorio, maquetación Word, Builder, disponibilidad y alcance descritos arriba siguen vigentes. La nota de sustentación continúa dependiendo de la presentación y dominio del grupo. El arranque advierte sobre la antigüedad del dialecto MariaDB; el flujo verificado funcionó, pero queda pendiente alinear la versión del motor con las versiones soportadas por Hibernate para una entrega más portable.
+
+
+AJUSTE FINAL DE ARRANQUE — 15/10/2026
+
+Durante la verificación del inicio reaparecieron archivos .class de versión 69 (Java 25), incompatibles con el runtime 21 (versión 65). Se corrigieron pom.xml y .vscode/settings.json para Java 21, se actualizaron las instrucciones del README y se reconstruyó target. El script de inicio deshabilita el reinicio automático de DevTools y comprueba el puerto 8082 para evitar otra instancia. Esta corrección de configuración sustituye las notas anteriores que indicaban POM y configuración sin modificar. No se modificaron clases Java de negocio, SQL, Word ni PPT.
+
+La aplicación se reinició correctamente; nueve comprobaciones HTTP posteriores respondieron 200, incluido el historial de la cita 3 y los reportes. Todos los .class inspeccionados en target/classes son versión 65. Los datos de prueba permanecieron después del reinicio, sin duplicar la carga inicial. Word y PPT todavía deben actualizar su referencia a Java 25 para coincidir con Java 21.
+
+
+DOCUMENTACIÓN CORREGIDA — 15/10/2026
+
+A solicitud del usuario se ajustaron los documentos: Java 21, fecha de entrega confirmada 16/10/2026, proporción y límites de las imágenes, índice y marcadores, manual en pasos y alcance de los simuladores. El informe final tiene 18 páginas y 22 entradas de índice verificadas contra el render. La presentación conserva siete diapositivas, el diseño y los nueve UML originales; incorpora las aclaraciones de simulación y notas para exponer. Se actualizaron README y .gitignore. Las copias previas se conservaron en el directorio privado de revisión, fuera de la carpeta a publicar.
+
+El marcador [usuario] se sustituyó por un estado honesto de repositorio pendiente: aún se necesita crear/publicar el repositorio, comprobar acceso e insertar la URL real en el informe y la PPT. No se inventó una URL a partir del nombre propuesto en VS Code. Los fallos de Builder, disponibilidad y los demás pendientes del código siguen abiertos: esta intervención se limitó a documentación y preparación de la publicación.

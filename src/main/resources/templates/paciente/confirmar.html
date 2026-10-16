@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Confirmar y pagar')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('paciente')}"></header>
+    <div th:replace="~{fragments/layout :: stepper(${ {'Buscar','Agendar','Pagar','Confirmar'} }, 2)}"></div>
+
+    <main class="app-card">
+        <a class="back-link" th:href="@{/paciente/medico/{id}(id=${medico.id},tipo=${tipo},fecha=${fecha})}">&larr; Editar cita</a>
+        <div class="eyebrow">Fase 3</div>
+        <h2>Confirma y paga tu cita</h2>
+        <div class="screen-sub">Revisa los datos, identifícate con tu DNI y confirma.</div>
+        <th:block th:replace="~{fragments/layout :: alertas}"></th:block>
+
+        <form method="get" th:action="@{/paciente/confirmar}">
+            <input type="hidden" name="idMedico" th:value="${medico.id}">
+            <input type="hidden" name="tipo" th:value="${tipo}">
+            <input type="hidden" name="fecha" th:value="${fecha}">
+            <input type="hidden" name="hora" th:value="${hora}">
+
+            <div class="summary-card">
+                <div class="summary-row"><span class="k">Médico</span><span class="v" th:text="${medico.nombreCompleto}"></span></div>
+                <div class="summary-row"><span class="k">Especialidad</span><span class="v" th:text="${medico.especialidad.nombre}"></span></div>
+                <div class="summary-row"><span class="k">Tipo de atención</span><span class="v" th:text="${tipo}"></span></div>
+                <div class="summary-row"><span class="k">Fecha y hora</span>
+                    <span class="v mono" th:text="|${@ui.fechaLarga(fecha)} · ${hora}|"></span></div>
+            </div>
+
+            <!-- DECORATOR: cada añadido envuelve al costo anterior -->
+            <div class="section-title">Costo de la consulta <span class="pattern-chip">Decorator</span></div>
+            <div class="summary-card">
+                <div class="summary-row" th:each="l : ${cotizacion.lineas}">
+                    <span class="k" th:text="${l.concepto}"></span><span class="v mono" th:text="|S/ ${l.monto}|"></span>
+                </div>
+                <div class="summary-total">
+                    <span class="k">Total a pagar (simulado)</span><span class="v" th:text="|S/ ${cotizacion.total}|"></span>
+                </div>
+            </div>
+            <label class="check">
+                <input type="checkbox" name="seguro" value="true" th:checked="${seguro}" onchange="this.form.submit()">
+                <span th:text="|Agregar seguro de atención (+ S/ ${cfg.costoSeguro})|">Agregar seguro</span>
+            </label>
+
+            <!-- ABSTRACT FACTORY: la familia elegida crea comprobante + leyenda coherentes -->
+            <div class="section-title">Comprobante <span class="pattern-chip">Abstract Factory</span></div>
+            <div class="choice-row">
+                <label class="choice">
+                    <input type="radio" name="comprobante" value="boleta" th:checked="${comprobante == 'boleta'}" onchange="this.form.submit()">🧾 Boleta de venta (con IGV)
+                </label>
+                <label class="choice">
+                    <input type="radio" name="comprobante" value="recibo" th:checked="${comprobante == 'recibo'}" onchange="this.form.submit()">📄 Recibo por honorarios (sin IGV)
+                </label>
+            </div>
+            <pre class="comprobante" th:text="${cotizacion.comprobante.texto}"></pre>
+
+            <!-- ADAPTER: validación de identidad con RENIEC -->
+            <div class="section-title">Identificación del paciente <span class="pattern-chip">Adapter · RENIEC</span></div>
+            <div class="field-row">
+                <div class="field">
+                    <label>DNI</label>
+                    <input type="text" name="dni" th:value="${dni}" maxlength="8" inputmode="numeric" placeholder="8 dígitos">
+                </div>
+                <div class="field" style="flex:none; min-width:0;">
+                    <button type="submit" class="ghost-btn" formnovalidate>Validar con RENIEC</button>
+                </div>
+            </div>
+            <th:block th:if="${validacion != null}">
+                <div class="reniec-ok" th:if="${validacion.valido}">
+                    ✔ <b th:text="${validacion.nombreCompleto}">Nombre</b> — <span th:text="${validacion.mensaje}"></span>
+                    <div class="reniec-sub" th:if="${registrado != null}">Paciente ya registrado en SaludCerca.</div>
+                    <div class="reniec-sub" th:if="${registrado == null}">Paciente nuevo: completa tus datos para registrarte.</div>
+                </div>
+                <div class="reniec-error" th:unless="${validacion.valido}" th:text="|✖ ${validacion.mensaje}|"></div>
+            </th:block>
+            <div class="field-row" th:if="${validacion != null and validacion.valido and registrado == null}">
+                <div class="field"><label>Correo electrónico</label><input type="email" name="email" required></div>
+                <div class="field"><label>Teléfono</label><input type="text" name="telefono" maxlength="20"></div>
+                <div class="field"><label>Fecha de nacimiento</label><input type="date" name="fechaNacimiento" required></div>
+            </div>
+
+            <!-- FACTORY METHOD: el canal elegido define qué fábrica se usa -->
+            <div class="section-title">¿Cómo te avisamos? <span class="pattern-chip">Factory Method</span></div>
+            <div class="choice-row">
+                <label class="choice"><input type="radio" name="canal" value="email" th:checked="${canal == 'email'}">📧 Correo electrónico</label>
+                <label class="choice"><input type="radio" name="canal" value="sms" th:checked="${canal == 'sms'}">📱 Mensaje de texto (SMS)</label>
+            </div>
+
+            <div class="test-banner">
+                <span>🧪</span>
+                <div><b>Modo prueba</b>El pago es simulado dentro del sistema: no se realiza ningún cobro real ni se conecta a una pasarela de pago.</div>
+            </div>
+
+            <button type="submit" class="primary-btn" th:formaction="@{/paciente/agendar}" formmethod="post"
+                    th:disabled="${validacion == null or !validacion.valido}">Confirmar y pagar (simulado)</button>
+            <p class="hint" style="text-align:center;">
+                Al confirmar, el <span class="pattern-chip">Facade</span> agenda la cita, genera el enlace de video, registra el pago y te notifica.
+            </p>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

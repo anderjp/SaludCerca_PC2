@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Cita confirmada')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('paciente')}"></header>
+    <div th:replace="~{fragments/layout :: stepper(${ {'Buscar','Agendar','Pagar','Confirmar'} }, 3)}"></div>
+
+    <main class="app-card">
+        <div class="confirm-wrap">
+            <div class="stamp">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
+                    <path d="M4 12.5L9.5 18L20 6" stroke="#125952" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2>Cita confirmada</h2>
+            <div class="screen-sub" style="margin-bottom:6px;">Tu cita quedó registrada en el sistema.</div>
+            <div class="code-pill" th:text="${@ui.codigoCita(cita.id)}">SC-000000</div>
+            <div class="pattern-row">
+                <span class="pattern-chip">Facade</span><span class="pattern-chip">Factory Method</span>
+                <span class="pattern-chip">Decorator</span><span class="pattern-chip">Abstract Factory</span>
+            </div>
+
+            <div class="summary-card" style="text-align:left; margin-top:18px;">
+                <div class="summary-row"><span class="k">Paciente</span><span class="v" th:text="${cita.paciente.nombreCompleto}"></span></div>
+                <div class="summary-row"><span class="k">Médico</span><span class="v" th:text="${cita.medico.nombreCompleto}"></span></div>
+                <div class="summary-row"><span class="k">Especialidad</span><span class="v" th:text="${cita.medico.especialidad.nombre}"></span></div>
+                <div class="summary-row"><span class="k">Tipo de atención</span><span class="v" th:text="${cita.tipoAtencion}"></span></div>
+                <div class="summary-row"><span class="k">Fecha y hora</span>
+                    <span class="v mono" th:text="${#temporals.format(cita.fechaHora, 'dd/MM/yyyy · HH:mm')}"></span></div>
+                <div class="summary-row" th:if="${cita.enlaceVideollamada != null}">
+                    <span class="k">Enlace de videollamada</span>
+                    <a class="v mono" style="color:var(--plum);" th:href="${cita.enlaceVideollamada}" target="_blank" rel="noopener"
+                       th:text="${cita.enlaceVideollamada}"></a>
+                </div>
+                <div class="summary-row" th:if="${pago != null}"><span class="k">Total</span>
+                    <span class="v" th:text="|S/ ${pago.monto} · ${pago.estadoPago} (simulado)|"></span></div>
+                <div class="summary-row"><span class="k">Estado de la cita</span>
+                    <span class="v" style="color:var(--primary);" th:text="${cita.estado}"></span></div>
+            </div>
+
+            <pre class="comprobante" th:if="${comprobante != null}" th:text="${comprobante.texto}"></pre>
+
+            <div class="toast">
+                <span>🔔</span>
+                <div>
+                    <b>Notificación enviada</b>
+                    <p th:text="${envio != null ? envio : (ultima != null ? ultima.mensaje : 'Se notificó al paciente.')}"></p>
+                </div>
+            </div>
+
+            <div class="actions">
+                <a class="ghost-btn" th:href="@{/paciente}">Agendar otra cita</a>
+                <a class="ghost-btn" th:href="@{/medico(medicoId=${cita.medico.id})}">Ver la agenda del médico →</a>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

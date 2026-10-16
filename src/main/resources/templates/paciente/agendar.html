@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Agendar cita')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('paciente')}"></header>
+    <div th:replace="~{fragments/layout :: stepper(${ {'Buscar','Agendar','Pagar','Confirmar'} }, 1)}"></div>
+
+    <main class="app-card">
+        <a class="back-link" th:href="@{/paciente}">&larr; Volver a la búsqueda</a>
+
+        <div class="doc-header">
+            <div class="avatar" th:style="|background:${@ui.colorEspecialidad(medico.especialidad.nombre)}|"
+                 th:text="${@ui.iniciales(medico.nombres, medico.apellidos)}">MC</div>
+            <div>
+                <h2 th:text="${medico.nombreCompleto}">Médico</h2>
+                <div class="doc-meta"
+                     th:text="|${medico.especialidad.nombre} · ${medico.colegiatura} · ${medico.centroSalud.nombre}, ${medico.centroSalud.distrito}|"></div>
+            </div>
+        </div>
+
+        <!-- Un solo formulario: al cambiar de día se recarga la página (GET);
+             el botón final envía los datos a /paciente/confirmar (formaction). -->
+        <form method="get" th:action="@{/paciente/medico/{id}(id=${medico.id})}">
+            <input type="hidden" name="idMedico" th:value="${medico.id}">
+
+            <div class="label-sm">Tipo de atención</div>
+            <div class="segmented">
+                <label class="seg-btn">
+                    <input type="radio" name="tipo" value="Presencial" th:checked="${tipoSel == 'Presencial'}">🏥 Presencial
+                </label>
+                <label class="seg-btn">
+                    <input type="radio" name="tipo" value="Teleconsulta" th:checked="${tipoSel == 'Teleconsulta'}"
+                           th:disabled="${!permiteTele}">💻 Teleconsulta
+                </label>
+            </div>
+            <div class="tele-note" th:unless="${permiteTele}"
+                 th:text="|ℹ️ ${medico.especialidad.nombre} no ofrece teleconsulta en esta plataforma — requiere evaluación presencial.|"></div>
+            <div class="tarifa-note">
+                Tarifa de la consulta: <b th:text="|S/ ${cfg.getTarifa(medico.especialidad.nombre)}|"></b>
+                <span th:if="${permiteTele}" th:text="|· la teleconsulta suma S/ ${cfg.recargoTeleconsulta}|"></span>
+            </div>
+
+            <div class="label-sm">Elige el día</div>
+            <div class="day-row">
+                <label class="day-pill" th:each="d : ${dias}">
+                    <input type="radio" name="fecha" th:value="${d}" th:checked="${d == dia}" onchange="this.form.submit()">
+                    <div class="dname" th:text="${@ui.dia(d)}">Lun</div>
+                    <div class="dnum" th:text="${d.dayOfMonth}">1</div>
+                </label>
+            </div>
+
+            <div class="label-sm" th:text="|Horarios disponibles · ${@ui.fechaLarga(dia)}|">Horarios</div>
+            <div class="slot-grid">
+                <label class="slot" th:each="h : ${horarios}" th:classappend="${h.ocupado} ? 'ocupado'"
+                       th:title="${h.ocupado} ? 'Horario ocupado' : 'Disponible'">
+                    <input type="radio" name="hora" th:value="${h.hora}" th:disabled="${h.ocupado}" required>
+                    <span th:text="${h.hora}">09:00</span>
+                </label>
+            </div>
+
+            <button type="submit" class="primary-btn" th:formaction="@{/paciente/confirmar}">Continuar al pago</button>
+        </form>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

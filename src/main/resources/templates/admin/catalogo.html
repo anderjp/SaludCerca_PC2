@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Gestionar catálogo')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('admin')}"></header>
+
+    <main class="app-card">
+        <nav th:replace="~{fragments/layout :: adminnav('catalogo')}"></nav>
+        <div class="eyebrow">Administración</div>
+        <h2>Gestionar catálogo</h2>
+        <div class="screen-sub">Especialidades, centros de salud y servicios disponibles en la plataforma.</div>
+        <th:block th:replace="~{fragments/layout :: alertas}"></th:block>
+
+        <div class="catalog-section">
+            <div class="label-sm">Especialidades</div>
+            <form class="add-row" method="post" th:action="@{/admin/especialidades}">
+                <input type="text" name="nombre" placeholder="Ej. Cardiología" maxlength="80" required>
+                <label class="tele-check"><input type="checkbox" name="teleconsulta" value="true"><span>Permite teleconsulta</span></label>
+                <button type="submit" class="add-btn">Agregar</button>
+            </form>
+            <div class="screen-sub" style="margin-bottom:12px; font-size:13px;">
+                Las especialidades que no permiten teleconsulta solo aceptan citas presenciales (regla validada también por el Facade).
+            </div>
+            <div class="tag-list">
+                <div class="tag-item" th:each="e : ${especialidades}">
+                    <span th:text="${e.nombre}">Especialidad</span>
+                    <span class="mini-badge" th:classappend="${e.permiteTeleconsulta} ? 'on' : 'off'"
+                          th:text="${e.permiteTeleconsulta} ? '📹 Teleconsulta' : '🏥 Solo presencial'"></span>
+                    <form method="post" th:action="@{/admin/especialidades/{id}/teleconsulta(id=${e.id})}">
+                        <button type="submit" class="toggle-btn" title="Cambiar modalidad">Cambiar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="catalog-section">
+            <div class="label-sm">Centros de salud</div>
+            <form class="add-row" method="post" th:action="@{/admin/centros}">
+                <input type="text" name="nombre" placeholder="Nombre del centro" maxlength="120" required>
+                <input type="text" name="distrito" placeholder="Distrito" maxlength="80" required style="max-width:200px;">
+                <button type="submit" class="add-btn">Agregar</button>
+            </form>
+            <div class="centro-card" th:each="c : ${centros}">
+                <div>
+                    <div class="centro-name" th:text="${c.nombre}">Centro</div>
+                    <div class="centro-meta" th:text="${c.distrito}">Distrito</div>
+                </div>
+                <span class="mono centro-meta" th:text="${c.telefono}"></span>
+            </div>
+        </div>
+
+        <div class="catalog-section">
+            <div class="section-title" style="margin-top:0;">Servicios y paquetes <span class="pattern-chip">Composite</span></div>
+            <div class="screen-sub" style="font-size:13px; margin-bottom:12px;">
+                Un paquete puede contener servicios u otros paquetes; su precio es la suma recursiva de sus componentes.
+            </div>
+            <ul class="tree">
+                <li th:replace="~{fragments/arbol :: nodo(${catalogo})}"></li>
+            </ul>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

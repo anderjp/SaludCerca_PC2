@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Buscar especialista')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('paciente')}"></header>
+    <div th:replace="~{fragments/layout :: stepper(${ {'Buscar','Agendar','Pagar','Confirmar'} }, 0)}"></div>
+
+    <main class="app-card">
+        <div class="eyebrow">Fase 1</div>
+        <h2>Encuentra a tu especialista</h2>
+        <div class="screen-sub">Busca por especialidad, nombre o distrito, y agenda en minutos.</div>
+
+        <form class="searchbar" method="get" th:action="@{/paciente}">
+            <input type="text" name="q" th:value="${q}" placeholder="Ej. nutrición, Castañeda, San Isidro...">
+            <select name="especialidad" onchange="this.form.submit()">
+                <option value="">Todas las especialidades</option>
+                <option th:each="e : ${especialidades}" th:value="${e.id}" th:text="${e.nombre}"
+                        th:selected="${e.id == especialidadSel}"></option>
+            </select>
+            <input type="hidden" name="tele" th:value="${tele}">
+            <button type="submit">Buscar</button>
+        </form>
+
+        <div class="chips">
+            <a class="chip" th:classappend="${!tele} ? 'on'"
+               th:href="@{/paciente(q=${q},especialidad=${especialidadSel})}">Todos</a>
+            <a class="chip" th:classappend="${tele} ? 'on'"
+               th:href="@{/paciente(q=${q},especialidad=${especialidadSel},tele=true)}">📹 Con teleconsulta</a>
+            <span class="chip" th:text="|${#lists.size(medicos)} especialista(s)|">0</span>
+        </div>
+
+        <div class="doctor-grid" th:unless="${#lists.isEmpty(medicos)}">
+            <a class="doctor-card" th:each="m : ${medicos}" th:href="@{/paciente/medico/{id}(id=${m.id})}">
+                <div class="avatar" th:style="|background:${@ui.colorEspecialidad(m.especialidad.nombre)}|"
+                     th:text="${@ui.iniciales(m.nombres, m.apellidos)}">MC</div>
+                <div>
+                    <div class="doc-name" th:text="${m.nombreCompleto}">Nombre</div>
+                    <div class="doc-spec" th:text="${m.especialidad.nombre}">Especialidad</div>
+                    <div class="doc-meta">
+                        <span th:text="|📍 ${m.centroSalud.nombre}, ${m.centroSalud.distrito}|"></span>
+                        <span th:text="|S/ ${cfg.getTarifa(m.especialidad.nombre)}|"></span>
+                        <span class="mono" th:text="${m.colegiatura}"></span>
+                    </div>
+                    <span class="doc-badge" th:if="${m.especialidad.permiteTeleconsulta}"
+                          style="background:var(--plum-soft); color:var(--plum);">📹 Con teleconsulta</span>
+                    <span class="doc-badge" th:unless="${m.especialidad.permiteTeleconsulta}"
+                          style="background:var(--danger-soft); color:var(--danger);">🏥 Solo presencial</span>
+                </div>
+            </a>
+        </div>
+        <div class="empty" th:if="${#lists.isEmpty(medicos)}">No encontramos especialistas con esos filtros.</div>
+
+        <p class="hint">Las tarifas vienen del tarifario central de la aplicación <span class="pattern-chip">Singleton</span></p>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Configuración general')}"></head>
+<body>
+<div class="wrap">
+    <header th:replace="~{fragments/layout :: brandbar('admin')}"></header>
+
+    <main class="app-card">
+        <nav th:replace="~{fragments/layout :: adminnav('configuracion')}"></nav>
+        <div class="eyebrow">Administración</div>
+        <h2>Configuración general</h2>
+        <div class="screen-sub">Parámetros únicos y compartidos por todo el sistema <span class="pattern-chip">Singleton</span></div>
+
+        <div class="singleton-proof">
+            <span>🔒</span>
+            <div>
+                Se llamó dos veces a <b>ConfiguracionApp.getInstance()</b> y ambas devolvieron el objeto
+                <b th:text="|@${idObjeto}|">@0</b> →
+                misma instancia: <b th:text="${mismaInstancia}">true</b>
+            </div>
+        </div>
+
+        <div class="two-col">
+            <div>
+                <div class="label-sm">Parámetros</div>
+                <table class="cfg">
+                    <tr><td>Aplicación</td><td th:text="${cfg.nombreApp}"></td></tr>
+                    <tr><td>Moneda</td><td th:text="${cfg.moneda}"></td></tr>
+                    <tr><td>IGV</td><td th:text="|${#numbers.formatDecimal(cfg.igv * 100, 1, 0)} %|"></td></tr>
+                    <tr><td>Recargo por teleconsulta</td><td th:text="|S/ ${cfg.recargoTeleconsulta}|"></td></tr>
+                    <tr><td>Seguro de atención</td><td th:text="|S/ ${cfg.costoSeguro}|"></td></tr>
+                    <tr><td>Tarifa por defecto</td><td th:text="|S/ ${cfg.tarifaPorDefecto}|"></td></tr>
+                    <tr><td>Instancia creada</td><td th:text="${#temporals.format(cfg.creadaEn, 'dd/MM/yyyy HH:mm:ss')}"></td></tr>
+                </table>
+            </div>
+            <div>
+                <div class="label-sm">Tarifario por especialidad</div>
+                <table class="cfg">
+                    <tr th:each="t : ${cfg.tarifario}"><td th:text="${t.key}"></td><td th:text="|S/ ${t.value}|"></td></tr>
+                </table>
+                <p class="hint">Lo usan la búsqueda del paciente, el cálculo del costo (Decorator) y el catálogo (Composite).</p>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="~{fragments/layout :: footer}"></footer>
+</div>
+</body>
+</html>

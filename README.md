@@ -185,7 +185,16 @@ _Proyecto académico — UTP, Diseño de Patrones, ciclo 2026-II._
 
 Con MySQL de XAMPP encendido, ejecuta `powershell -NoProfile -ExecutionPolicy Bypass -File .\iniciar-local.ps1` desde esta carpeta. El script utiliza el JDK 21 portátil y la caché Maven disponibles en esta PC; no cambia Java globalmente. La aplicación abre en http://127.0.0.1:8082/. Para otro equipo, configura su JDK 21 y usa el wrapper Maven como se indica arriba.
 
-La documentación de entrega se ajustó a Java 21 y a la fecha 16/10/2026. El enlace definitivo del repositorio debe completarse después de publicarlo y verificar el acceso del docente.
+La documentación de entrega usa Java 21 y la fecha 16/10/2026. Repositorio público: [https://github.com/anderjp/SaludCerca_PC2](https://github.com/anderjp/SaludCerca_PC2).
+
+Para obtener una copia con Git:
+
+```powershell
+git clone https://github.com/anderjp/SaludCerca_PC2.git
+cd SaludCerca_PC2
+```
+
+También se puede descargar desde **Code → Download ZIP**. Luego seguir los requisitos y pasos de ejecución de este README.
 
 ## Alcance y simulaciones de PC2
 

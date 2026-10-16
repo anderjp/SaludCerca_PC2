@@ -98,3 +98,9 @@ DOCUMENTACIÓN CORREGIDA — 15/10/2026
 A solicitud del usuario se ajustaron los documentos: Java 21, fecha de entrega confirmada 16/10/2026, proporción y límites de las imágenes, índice y marcadores, manual en pasos y alcance de los simuladores. El informe final tiene 18 páginas y 22 entradas de índice verificadas contra el render. La presentación conserva siete diapositivas, el diseño y los nueve UML originales; incorpora las aclaraciones de simulación y notas para exponer. Se actualizaron README y .gitignore. Las copias previas se conservaron en el directorio privado de revisión, fuera de la carpeta a publicar.
 
 El marcador [usuario] se sustituyó por un estado honesto de repositorio pendiente: aún se necesita crear/publicar el repositorio, comprobar acceso e insertar la URL real en el informe y la PPT. No se inventó una URL a partir del nombre propuesto en VS Code. Los fallos de Builder, disponibilidad y los demás pendientes del código siguen abiertos: esta intervención se limitó a documentación y preparación de la publicación.
+
+
+ACTUALIZACIÓN: REPOSITORIO PÚBLICO VERIFICADO
+
+https://github.com/anderjp/SaludCerca_PC2
+La consulta anónima a GitHub y git ls-remote verificaron acceso público a main, commit inicial add7233. El árbol remoto contiene 109 archivos, incluidos pom.xml, fuentes Java, script SQL, wrapper Maven, README, Word y PPT. Esta comprobación sustituye el pendiente de publicación señalado en revisiones anteriores. La URL se incorporó como hipervínculo al informe 4.1 y la diapositiva 1; el README y la guía también incluyen la dirección real. Las versiones locales con este último ajuste deben guardarse en un nuevo commit y sincronizarse para que estén en GitHub. La publicación no corrige las observaciones de código ni acredita por sí sola el dominio de la sustentación.

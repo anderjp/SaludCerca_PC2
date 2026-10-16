@@ -15,7 +15,7 @@ Criterio 3: cuatro patrones estructurales (4 puntos).
 Están Adapter, Facade, Decorator y Composite. Hay casos de uso en las pantallas. Corregir disponibilidad para que las citas canceladas no bloqueen turnos que se muestran libres y proteger las reservas simultáneas del mismo médico/horario. Explicar RENIEC, mensajes, pagos y enlaces de reunión como simulaciones de esta entrega.
 
 Criterio 4: calidad de código, SOLID y repositorio (4 puntos).
-Falta publicar el repositorio y colocar su URL real en Word 4.1 y diapositiva 1. El marcador [usuario] no cumple. Sin repositorio accesible, la rúbrica describe el nivel Inicio (1 punto) para este criterio. Mantener código fuente ordenado, documentación y README reproducible. Mejorar la separación de la lógica de registro/reserva actualmente presente en PacienteController. No basta un ZIP como único contenido del repositorio: el código debe poder examinarse y descargarse con sus carpetas.
+El repositorio público https://github.com/anderjp/SaludCerca_PC2 ya permite consultar el código, el SQL, el wrapper Maven, el README y los documentos. La URL real se incorporó en Word 4.1 y diapositiva 1. Sincronizar las últimas correcciones de los documentos desde VS Code. Mantener código fuente ordenado, documentación y README reproducible. Mejorar la separación de la lógica de registro/reserva actualmente presente en PacienteController.
 
 Criterio 5: sustentación y demo (4 puntos).
 Se debe explicar y demostrar cada patrón, localizarlo en código y responder preguntas. La consigna establece 15 minutos de presentación/demo y 5 de preguntas. El video sirve de ensayo o evidencia; la consigna entregada no dice que sustituya la demo en vivo, por lo que esa sustitución depende de lo que haya indicado el profesor por otro medio.
@@ -179,8 +179,14 @@ Este archivo es una guía de preparación; no modifica el código, los documento
 
 Actualización de documentos y publicación desde VS Code
 
-Se ajustaron el Word y la PPT a Java 21 y a la fecha confirmada 16/10/2026. El informe tiene 18 páginas: los 22 enlaces del índice coinciden con sus páginas, los diagramas caben dentro del ancho útil y las capturas conservan su proporción. La PPT conserva siete diapositivas y tiene notas del presentador para el recorrido. El README se ajustó a la misma instalación y al alcance real. El enlace definitivo del repositorio continúa pendiente. Los pendientes del código identificados en la revisión no se han corregido mediante estos ajustes de documentos.
+Se ajustaron el Word y la PPT a Java 21 y a la fecha confirmada 16/10/2026. El informe tiene 18 páginas: los 22 enlaces del índice coinciden con sus páginas, los diagramas caben dentro del ancho útil y las capturas conservan su proporción. La PPT conserva siete diapositivas y tiene notas del presentador para el recorrido. El README se ajustó a la misma instalación y al alcance real. El repositorio público es https://github.com/anderjp/SaludCerca_PC2; su enlace se incorporó al informe y a la PPT. Los pendientes del código identificados en la revisión no se han corregido mediante estos ajustes de documentos.
 
 Desde la pantalla mostrada de VS Code, Publish to GitHub public repository crea un repositorio público; Publish to GitHub private repository lo crea privado y requiere conceder acceso al profesor. Abrir antes la carpeta SaludCerca_PC2 de la ruta revisada, elegir un nombre disponible y comprobar los archivos seleccionados. .gitignore excluye target, .vscode, .claude, logs y archivos locales. Al terminar, usar Open on GitHub y copiar la URL real para insertarla en Word y en la primera diapositiva. Si se publica antes de guardar estas correcciones, hacer después un commit y subirlo con Push/Sync Changes.
 
 Referencia oficial: https://code.visualstudio.com/docs/sourcecontrol/repos-remotes
+
+
+Repositorio publicado y documentos enlazados
+
+https://github.com/anderjp/SaludCerca_PC2
+Se verificó acceso público sin iniciar sesión y la presencia del código fuente, SQL, wrapper Maven, README y ambos documentos. Para subir las versiones locales que ya incluyen el enlace: abrir Control de código fuente en VS Code, revisar los cinco archivos modificados, crear un commit con el mensaje «Documentación PC2 con enlace al repositorio» y pulsar Sincronizar cambios. Comprobar en GitHub que aparece ese nuevo commit.
